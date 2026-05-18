@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashStock Admin | Dashboard Global</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dash-bg: radial-gradient(circle at 18% 12%, #e7f8ff 0%, #fbf9f2 40%, #f4f8ff 100%);
+            --dash-card: #ffffff;
+            --dash-ink: #1f2937;
+            --dash-accent: #0f766e;
+            --dash-alt: #0ea5e9;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Space Grotesk", sans-serif;
+            color: var(--dash-ink);
+            background: var(--dash-bg);
+            min-height: 100vh;
+        }
+
+        .dashboard-shell {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 1rem 2.5rem;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(120deg, #0f766e, #0ea5e9);
+            color: #fff;
+            border-radius: 18px;
+            padding: 1.25rem;
+            box-shadow: 0 14px 38px rgba(14, 165, 233, 0.22);
+        }
+
+        .kpi-card {
+            background: var(--dash-card);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 10px 26px rgba(30, 41, 59, 0.08);
+            height: 100%;
+        }
+
+        .kpi-title {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .kpi-value {
+            font-weight: 700;
+            font-size: 1.85rem;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .chart-card {
+            background: var(--dash-card);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 10px 26px rgba(30, 41, 59, 0.08);
+            height: 100%;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .denied-card {
+            background: linear-gradient(140deg, #fff1f2, #fff9f0);
+            border: 1px solid #fecdd3;
+            border-radius: 18px;
+            padding: 1.25rem;
+            box-shadow: 0 10px 30px rgba(190, 24, 93, 0.12);
+        }
+
+        .denied-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #be123c;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-shell">
+    <section class="dashboard-header mb-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start align-items-md-center">
+            <div>
+                <p class="mb-1 small text-uppercase">FlashStock Admin</p>
+                <h1 class="h3 mb-0">Dashboard Global en Tiempo Real</h1>
+            </div>
+            <div>
+                <a href="inventory.html" class="btn btn-light btn-sm me-2">Inventario Admin</a>
+                <a href="shipments.html" class="btn btn-light btn-sm me-2">Envios en Camino</a>
+                <a href="../delivery.html" class="btn btn-light btn-sm me-2">Delivery</a>
+                <a href="../index.html" class="btn btn-outline-light btn-sm">Tienda</a>
+            </div>
+        </div>
+        <p id="dashSessionInfo" class="mb-0 mt-2 small">Validando permisos...</p>
+    </section>
+
+    <section id="dashDenied" class="denied-card hidden" role="alert" aria-live="polite">
+        <div class="d-flex flex-column flex-md-row gap-3 align-items-start">
+            <span class="denied-icon"><i class="fas fa-lock"></i></span>
+            <div>
+                <h2 class="h5 mb-1">No tienes acceso al Dashboard Global</h2>
+                <p id="dashDeniedReason" class="mb-2">Esta vista solo esta habilitada para la cuenta administradora.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="../login.html" class="btn btn-outline-danger btn-sm">Cambiar de cuenta</a>
+                    <a href="../index.html" class="btn btn-outline-secondary btn-sm">Volver a tienda</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="dashContent" class="hidden">
+        <section class="row g-3 mb-3">
+            <div class="col-6 col-md-3"><article class="kpi-card"><p class="kpi-title">SKUs</p><p id="kpiSkus" class="kpi-value">0</p></article></div>
+            <div class="col-6 col-md-3"><article class="kpi-card"><p class="kpi-title">Stock Total</p><p id="kpiStock" class="kpi-value">0</p></article></div>
+            <div class="col-6 col-md-3"><article class="kpi-card"><p class="kpi-title">Órdenes</p><p id="kpiOrders" class="kpi-value">0</p></article></div>
+            <div class="col-6 col-md-3"><article class="kpi-card"><p class="kpi-title">Envíos</p><p id="kpiShipments" class="kpi-value">0</p></article></div>
+        </section>
+
+        <section class="row g-3 mb-3">
+            <div class="col-12 col-lg-6">
+                <article class="chart-card">
+                    <h2 class="h6">Estado de Órdenes</h2>
+                    <canvas id="ordersChart" height="200"></canvas>
+                </article>
+            </div>
+            <div class="col-12 col-lg-6">
+                <article class="chart-card">
+                    <h2 class="h6">Estado de Envíos</h2>
+                    <canvas id="shipmentsChart" height="200"></canvas>
+                </article>
+            </div>
+        </section>
+
+        <section class="row g-3 mb-3">
+            <div class="col-12 col-lg-8">
+                <article class="chart-card">
+                    <h2 class="h6">Top SKUs (Stock vs Pedidos)</h2>
+                    <canvas id="skuChart" height="130"></canvas>
+                </article>
+            </div>
+            <div class="col-12 col-lg-4">
+                <article class="chart-card">
+                    <h2 class="h6">Cashflow</h2>
+                    <canvas id="cashflowChart" height="130"></canvas>
+                </article>
+            </div>
+        </section>
+
+        <section class="chart-card mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 mb-0">Pedidos y Envíos en Vivo</h2>
+                <span id="dashOrdersLastUpdate" class="small text-muted">Sin datos</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Orden</th>
+                        <th>Cliente</th>
+                        <th>Tracking</th>
+                        <th>Estado</th>
+                        <th>ETA restante</th>
+                        <th>Inicio envío</th>
+                        <th>Última actualización</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dashOrdersLiveBody">
+                    <tr><td colspan="7" class="text-muted">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="chart-card">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 mb-0">Métricas de SKU</h2>
+                <span id="dashLastUpdate" class="small text-muted">Sin datos</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Bodega</th>
+                        <th>Stock</th>
+                        <th>Pedidos</th>
+                        <th>Disponible</th>
+                        <th>Riesgo</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dashSkuTable">
+                    <tr><td colspan="6" class="text-muted">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="/runtime-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

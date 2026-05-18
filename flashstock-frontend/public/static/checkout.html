@@ -1,0 +1,520 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>FlashStock - Plataforma Logistica</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet"> 
+
+        <!-- Icon Font Stylesheet -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <!-- Spinner Start -->
+        <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+            <div class="spinner-grow text-primary" role="status"></div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Navbar start -->
+        <div class="container-fluid fixed-top">
+            <div class="container topbar bg-primary d-none d-lg-block">
+                <div class="d-flex justify-content-between">
+                    <div class="top-info ps-2">
+                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">123 Street, New York</a></small>
+                        <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
+                    </div>
+                    <div class="top-link pe-2">
+                        <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
+                        <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
+                        <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+                    </div>
+                </div>
+            </div>
+            <div class="container px-0">
+                <nav class="navbar navbar-light bg-white navbar-expand-xl">
+                    <a href="http://localhost:3000/" class="navbar-brand"><h1 class="text-primary display-6">FlashStock</h1></a>
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                        <div class="navbar-nav mx-auto">
+                            <a href="http://localhost:3000/" class="nav-item nav-link">Index</a>
+                            <a href="http://localhost:3000/shop" class="nav-item nav-link">Tienda</a>
+                            <a href="http://localhost:3000/cart" class="nav-item nav-link">Carrito de Compras</a>
+                            <a href="http://localhost:3000/checkout" class="nav-item nav-link active">Checkout</a>
+                            <a href="http://localhost:3000/delivery" class="nav-item nav-link">Delivery</a>
+                            <a href="http://localhost:3000/contact" class="nav-item nav-link">Contacto</a>
+                        </div>
+                        <div class="d-flex m-3 me-0">
+                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
+                            <a href="http://localhost:3000/cart" class="position-relative me-4 my-auto">
+                                <i class="fa fa-shopping-bag fa-2x"></i>
+                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                            </a>
+                            <a href="http://localhost:3000/login" class="my-auto">
+                                <i class="fas fa-user fa-2x"></i>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Navbar End -->
+
+
+        <!-- Modal Search Start -->
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Buscar por letras claves</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex align-items-center">
+                        <div class="input-group w-75 mx-auto d-flex">
+                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Search End -->
+
+
+        <!-- Single Page Header start -->
+        <div class="container-fluid page-header py-5">
+            <h1 class="text-center text-white display-6">Pagos</h1>
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="/">Index</a></li>
+                <li class="breadcrumb-item"><a href="#">Paginas</a></li>
+                <li class="breadcrumb-item active text-white">Pagos</li>
+            </ol>
+        </div>
+        <!-- Single Page Header End -->
+
+
+        <!-- Checkout Page Start -->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <h1 class="mb-4">Detalles de Facturación</h1>
+                <form id="checkoutForm" action="#">
+                    <div class="row g-5">
+                        <div class="col-md-12 col-lg-6 col-xl-7">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-6">
+                                    <div class="form-item w-100">
+                                        <label class="form-label my-3">Nombres<sup>*</sup></label>
+                                        <input id="checkoutFirstName" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-6">
+                                    <div class="form-item w-100">
+                                        <label class="form-label my-3">Apellidos<sup>*</sup></label>
+                                        <input id="checkoutLastName" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Nombre de la Empresa<sup>*</sup></label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Dirección <sup>*</sup></label>
+                                <input id="checkoutAddress" type="text" class="form-control" placeholder="House Number Street Name">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Ciudad<sup>*</sup></label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Pais<sup>*</sup></label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Zip Code<sup>*</sup></label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Telefono Celular<sup>*</sup></label>
+                                <input type="tel" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Direccion de Correo<sup>*</sup></label>
+                                <input id="checkoutEmail" type="email" class="form-control">
+                            </div>
+                            <div class="form-check my-3">
+                                <input type="checkbox" class="form-check-input" id="Account-1" name="Accounts" value="Accounts">
+                                <label class="form-check-label" for="Account-1">Crear cuenta?</label>
+                            </div>
+                            <hr>
+                            <div class="form-check my-3">
+                                <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address">
+                                <label class="form-check-label" for="Address-1">Enviar a una dirección diferente?</label>
+                            </div>
+                            <div class="form-item">
+                                <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Oreder Notes (Optional)"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-5">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Productos</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Precio</th>
+                                            <th scope="col">Cantidad</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="checkoutItemsBody">
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <img src="img/vegetable-item-2.jpg" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                                </div>
+                                            </th>
+                                            <td class="py-5">Increible Brocoli</td>
+                                            <td class="py-5">$69.00</td>
+                                            <td class="py-5">2</td>
+                                            <td class="py-5">$138.00</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <img src="img/vegetable-item-5.jpg" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                                </div>
+                                            </th>
+                                            <td class="py-5">Papas</td>
+                                            <td class="py-5">$69.00</td>
+                                            <td class="py-5">2</td>
+                                            <td class="py-5">$138.00</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <img src="img/vegetable-item-3.png" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                                </div>
+                                            </th>
+                                            <td class="py-5">Platanos</td>
+                                            <td class="py-5">$69.00</td>
+                                            <td class="py-5">2</td>
+                                            <td class="py-5">$138.00</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                            </th>
+                                            <td class="py-5"></td>
+                                            <td class="py-5"></td>
+                                            <td class="py-5">
+                                                <p class="mb-0 text-dark py-3">Subtotal</p>
+                                            </td>
+                                            <td class="py-5">
+                                                <div class="py-3 border-bottom border-top">
+                                                    <p class="mb-0 text-dark">$414.00</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                            </th>
+                                            <td class="py-5">
+                                                <p class="mb-0 text-dark py-4">Envio</p>
+                                            </td>
+                                            <td colspan="3" class="py-5">
+                                                <div class="form-check text-start">
+                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                                                    <label class="form-check-label" for="Shipping-1">Envio Gratis</label>
+                                                </div>
+                                                <div class="form-check text-start">
+                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
+                                                    <label class="form-check-label" for="Shipping-2">Tarifa plana: $15.00</label>
+                                                </div>
+                                                <div class="form-check text-start">
+                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
+                                                    <label class="form-check-label" for="Shipping-3">Recogida local: $8.00</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                            </th>
+                                            <td class="py-5">
+                                                <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
+                                            </td>
+                                            <td class="py-5"></td>
+                                            <td class="py-5"></td>
+                                            <td class="py-5">
+                                                <div class="py-3 border-bottom border-top">
+                                                    <p class="mb-0 text-dark">$135.00</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Transfer-1" name="Transfer" value="Transfer">
+                                        <label class="form-check-label" for="Transfer-1">Transferencia Bancaria Directa</label>
+                                    </div>
+                                    <p class="text-start text-dark">Haga su pago directamente a nuestra cuenta bancaria. Por favor, use su ID de pedido como referencia de pago. Su pedido no será enviado hasta que los fondos se hayan acreditado en nuestra cuenta.</p>
+                                </div>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1" name="Payments" value="Payments">
+                                        <label class="form-check-label" for="Payments-1">Pagos</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1" name="Delivery" value="Delivery">
+                                        <label class="form-check-label" for="Delivery-1">Efectivo contra entrega</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                                <div class="col-12">
+                                    <div class="form-check text-start my-3">
+                                        <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1" name="Paypal" value="Paypal">
+                                        <label class="form-check-label" for="Paypal-1">Paypal</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                                <div class="col-12">
+                                    <label for="shippingCarrier" class="form-label text-start w-100">Transportista</label>
+                                    <select id="shippingCarrier" class="form-select mb-3">
+                                        <option value="DHL">DHL</option>
+                                        <option value="FEDEX">FedEx</option>
+                                        <option value="UPS">UPS</option>
+                                        <option value="CHILEXPRESS">Chilexpress</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="checkoutCouponCode" class="form-label text-start w-100">Cupón de descuento</label>
+                                    <div class="input-group mb-2">
+                                        <input id="checkoutCouponCode" type="text" class="form-control" placeholder="Ej: FLASH10">
+                                        <button id="btnApplyCheckoutCoupon" class="btn border-secondary text-primary" type="button">Aplicar</button>
+                                    </div>
+                                    <div id="checkoutCouponStatus" class="small text-muted text-start">Ingresa un cupón para aplicar descuento.</div>
+                                </div>
+                                <button id="btnPlaceOrder" type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Orden</button>
+                                <div id="checkoutApiResult" class="small text-muted mt-2"></div>
+                                <div id="googlePayCheckoutSection" class="mt-3" style="display:none;">
+                                    <div id="googlePayCheckoutTitle" class="small text-muted text-start">Paga con Google Pay (modo prueba).</div>
+                                    <div id="googlePayCheckoutAmount" class="small text-dark text-start mt-1"></div>
+                                    <div id="googlePayButtonContainer" class="mt-2"></div>
+                                    <div id="googlePayStatus" class="small text-muted mt-2 text-start"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="myOrdersPanel" class="mt-5" style="display:none;">
+                    <h4 class="mb-3">Mis pedidos (tiempo real)</h4>
+                    <div id="myOrdersList" class="small text-muted">Cargando historial...</div>
+                </div>
+
+                <div id="deliveryTrackingPanel" class="mt-4" style="display:none;">
+                    <div class="p-3 border rounded bg-white">
+                        <h4 class="mb-3">Seguimiento de envio en curso</h4>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3"><strong>Estado:</strong> <span id="trackingStatus">-</span></div>
+                            <div class="col-md-2"><strong>Avance:</strong> <span id="trackingProgress">0%</span></div>
+                            <div class="col-md-3"><strong>Repartidor:</strong> <span id="trackingCourier">-</span></div>
+                            <div class="col-md-4"><strong>Destino:</strong> <span id="trackingAddress">-</span></div>
+                            <div class="col-md-3"><strong>ETA total:</strong> <span id="trackingEtaTotal">-</span></div>
+                            <div class="col-md-3"><strong>ETA restante:</strong> <span id="trackingEtaRemaining">-</span></div>
+                        </div>
+                        <div id="deliveryTrackingMap" style="height: 420px; border-radius: 12px; overflow: hidden;"></div>
+                        <div class="mt-3">
+                            <h5 class="h6 mb-2">Tiempos por tramo</h5>
+                            <div id="trackingSegments" class="small text-muted">Sin datos de tramos.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="driverLivePanel" class="mt-4" style="display:none;">
+                    <div class="p-3 border rounded bg-white">
+                        <h4 class="mb-3">Panel repartidor (en vivo)</h4>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="driverTrackingNumber" class="form-label">Tracking</label>
+                                <input id="driverTrackingNumber" class="form-control" type="text" placeholder="TRK-XXXXXX">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="driverStatus" class="form-label">Estado</label>
+                                <select id="driverStatus" class="form-select">
+                                    <option value="proceso">proceso</option>
+                                    <option value="enviado">enviado</option>
+                                    <option value="cancelado">cancelado</option>
+                                    <option value="completado">completado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="driverLat" class="form-label">GPS repartidor lat</label>
+                                <input id="driverLat" class="form-control" type="number" step="0.000001" placeholder="-33.45">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="driverLng" class="form-label">GPS repartidor lng</label>
+                                <input id="driverLng" class="form-control" type="number" step="0.000001" placeholder="-70.66">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="driverName" class="form-label">Nombre repartidor</label>
+                                <input id="driverName" class="form-control" type="text" placeholder="Repartidor FlashStock">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <button id="btnDriverUpdateLive" type="button" class="btn border-secondary px-4 text-primary w-100">Actualizar GPS y estado</button>
+                            </div>
+                            <div class="col-12">
+                                <div id="driverLiveResult" class="small text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Checkout Page End -->
+
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
+            <div class="container py-5">
+                <div class="pb-4 mb-4" style="border-bottom: 1px solid rgba(226, 175, 24, 0.5) ;">
+                    <div class="row g-4">
+                        <div class="col-lg-3">
+                            <a href="#">
+                                <h1 class="text-primary mb-0">FlashStock</h1>
+                                <p class="text-secondary mb-0">Productos frescos</p>
+                            </a>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="position-relative mx-auto">
+                                <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Su Email">
+                                <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribete ahora</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="d-flex justify-content-end pt-3">
+                                <a class="btn  btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i class="fab fa-twitter"></i></a>
+                                <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
+                                <a class="btn btn-outline-secondary me-2 btn-md-square rounded-circle" href=""><i class="fab fa-youtube"></i></a>
+                                <a class="btn btn-outline-secondary btn-md-square rounded-circle" href=""><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-item">
+                            <h4 class="text-light mb-3">¿Por qué la gente nos quiere!</h4>
+                            <p class="mb-4">typesetting, remaining essentially unchanged. It was 
+                                popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
+                            <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Leer más</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="d-flex flex-column text-start footer-item">
+                            <h4 class="text-light mb-3">Informacion de la tienda</h4>
+                            <a class="btn-link" href="">Acerca de nosotros</a>
+                            <a class="btn-link" href="">Contáctanos</a>
+                            <a class="btn-link" href="">Política de privacidad</a>
+                            <a class="btn-link" href="">Términos y condiciones</a>
+                            <a class="btn-link" href="">Política de devoluciones</a>
+                            <a class="btn-link" href="">Preguntas frecuentes</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="d-flex flex-column text-start footer-item">
+                            <h4 class="text-light mb-3">Cuenta</h4>
+                            <a class="btn-link" href="">Mi Cuenta</a>
+                            <a class="btn-link" href="">Detalles de la tienda</a>
+                            <a class="btn-link" href="">Carrito de compras</a>
+                            <a class="btn-link" href="">Lista de deseos</a>
+                            <a class="btn-link" href="">Historial de pedidos</a>
+                            <a class="btn-link" href="">Pedidos internacionales</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-item">
+                            <h4 class="text-light mb-3">Contacto</h4>
+                            <p>Address: Antonio Varas, Providencia</p>
+                            <p>Email: Aron83353@gmail.com</p>
+                            <p>Phone: +569 6249 4006</p>
+                            <p>Metodos de pago aceptados</p>
+                            <img src="img/payment.png" class="img-fluid" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+        <!-- Copyright Start -->
+        <div class="container-fluid copyright bg-dark py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>FlashStock</a>, Todos los derechos reservados.</span>
+                    </div>
+                    <div class="col-md-6 my-auto text-center text-md-end text-white">
+                        <!--/*** The authorâ€™s attribution link must remain intact in the template. ***/-->
+                        <!--/*** If you wish to remove this credit link, please purchase the Pro Version . ***/-->
+                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Copyright End -->
+
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+
+        
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/runtime-config.js"></script>
+    <script src="js/main.js?v=receipt-20260331-4"></script>
+    </body>
+
+</html>

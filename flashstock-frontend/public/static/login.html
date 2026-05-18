@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>FlashStock | Login</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid py-5 hero-header" style="min-height: 100vh;">
+        <div class="container py-5">
+            <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="bg-white rounded p-5 shadow">
+                        <div class="text-center mb-4">
+                            <h2 class="text-primary">Iniciar sesion</h2>
+                            <p class="mb-0">Accede con tu cuenta de Google o Microsoft para continuar en FlashStock.</p>
+                        </div>
+                        <div id="loginStatus" class="alert alert-info small d-none" role="alert"></div>
+                        <div id="loginError" class="alert alert-danger small d-none" role="alert"></div>
+                        <a href="#" data-oauth-provider="google" class="btn btn-primary w-100 py-3 rounded-pill mb-3">
+                            <i class="fab fa-google me-2"></i>Continuar con Google
+                        </a>
+                        <a id="logon" href="/"  class="btn btn-dark w-100 py-3 rounded-pill mb-3">
+                            <i class="fab fa-microsoft me-2"></i>Continuar logueo
+                        </a>
+                        <a href="/logout" class="btn btn-outline-danger w-100 py-2 rounded-pill mb-2">Cerrar sesion</a>
+                        <a href="http://localhost:3000/" class="btn btn-outline-secondary w-100 py-2 rounded-pill">Volver al inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="/runtime-config.js"></script>
+        <script src="js/main.js"></script>
+
+    <script>
+    // Usamos DOMContentLoaded para asegurar que el botón ya exista en el HTML
+        document.addEventListener('DOMContentLoaded', () => {
+        const loginBtn = document.getElementById('logon');
+
+        if (!loginBtn) {
+        return;
+        }
+
+        loginBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const originalText = loginBtn.innerHTML;
+        loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
+        loginBtn.style.pointerEvents = 'none';
+
+        try {
+            // Preferido: API wrapper que ya tienes en main.js
+            let response = null;
+            if (window.FlashStockApi && typeof FlashStockApi.getCurrentUser === 'function') {
+            response = await FlashStockApi.getCurrentUser();
+            } else {
+            // Respaldo directo
+            const apiBase = window.FLASHSTOCK_API_BASE || '';
+            const direct = await fetch(`${apiBase}/api/auth/me`, { credentials: 'include' });
+            if (direct.ok) {
+                response = await direct.json();
+            }
+            }
+
+            if (response && response.data && response.data.authenticated) {
+            if (response.data.admin) {
+                window.location.href = '/admin/dashboard';
+            } else {
+                window.location.href = '/inventory';
+            }
+            } else {
+            alert('Sesión no encontrada o expirada.');
+            }
+        } catch (error) {
+            console.error('Error en el login:', error);
+            alert('No se pudo verificar la sesión. Revisa la consola.');
+        } finally {
+            loginBtn.innerHTML = originalText;
+            loginBtn.style.pointerEvents = 'auto';
+        }
+        });
+    });
+    </script>
+
+    <script>
+        (async function () {
+            const params = new URLSearchParams(window.location.search);
+            const apiBase = "http://localhost:8081";
+            document.querySelectorAll('[data-oauth-provider]').forEach((link) => {
+                const provider = link.getAttribute('data-oauth-provider');
+                if (provider) {
+                    link.href = `${apiBase}/oauth2/authorization/${provider}`;
+                }
+            });
+            const error = params.get('error');
+            const message = params.get('message');
+            const errorBox = document.getElementById('loginError');
+
+            if (errorBox && error) {
+                let text = 'No se pudo iniciar sesion con OAuth2.';
+                if (message) {
+                    const decodedMessage = message;
+                    text += ' Detalle: ' + decodedMessage;
+
+                    if (decodedMessage.includes('AADSTS50020')) {
+                        text += ' Solucion: configura la app como multitenant (Accounts in any organizational directory) o usa una cuenta del tenant registrado.';
+                    } else if (decodedMessage.includes('AADSTS50011')) {
+                        text += ' Solucion: revisa Redirect URI en Azure y usa exactamente http://localhost:8080/login/oauth2/code/microsoft.';
+                    } else if (decodedMessage.includes('AADSTS700016')) {
+                        text += ' Solucion: revisa MICROSOFT_CLIENT_ID y que la app exista en el tenant correcto.';
+                    }
+                }
+
+                errorBox.classList.remove('d-none');
+                errorBox.textContent = text;
+            }
+
+            try {
+                const apiBase = "http://localhost:8081";
+                const providersResponse = await fetch(`${apiBase}/api/auth/providers`, { credentials: 'include' });
+                if (providersResponse.ok) {
+                    const providerPayload = await providersResponse.json();
+                    const providers = providerPayload && providerPayload.data ? providerPayload.data : {};
+                    const microsoftButton = document.getElementById('btnMicrosoftLogin');
+                    const status = document.getElementById('loginStatus');
+
+                    if (microsoftButton && !providers.microsoft) {
+                        microsoftButton.classList.remove('btn-dark');
+                        microsoftButton.classList.add('btn-secondary', 'disabled');
+                        microsoftButton.setAttribute('aria-disabled', 'true');
+                        microsoftButton.setAttribute('tabindex', '-1');
+                        microsoftButton.removeAttribute('href');
+
+                        if (status) {
+                            status.classList.remove('d-none');
+                            status.textContent = 'Microsoft no esta configurado aun. Define MICROSOFT_CLIENT_ID, MICROSOFT_CLIENT_SECRET y MICROSOFT_TENANT_ID para habilitarlo.';
+                        }
+                    }
+                }
+
+                const response = await fetch(`${apiBase}/api/auth/me`, { credentials: 'include' });
+                if (!response.ok) {
+                    return;
+                }
+
+                const payload = await response.json();
+                const session = payload && payload.data ? payload.data : null;
+                if (!session || !session.authenticated) {
+                    return;
+                }
+
+                const status = document.getElementById('loginStatus');
+                if (status) {
+                    status.classList.remove('d-none');
+                    status.textContent = 'Sesion activa con ' + (session.email || 'tu cuenta') + '. Redirigiendo...';
+                }
+
+                setTimeout(function () {
+                    window.location.href = '/index.html';
+                }, 900);
+            } catch (e) {
+                // Ignore session check failure and keep login page available.
+            }
+        })();
+    </script>
+</body>
+</html>

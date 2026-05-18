@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>FlashStock - Estado de Pedido</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .status-shell {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+        }
+
+        .status-hero {
+            border-radius: 18px;
+            color: #fff;
+            padding: 1.2rem;
+            background: linear-gradient(120deg, #0f766e, #0ea5e9);
+            box-shadow: 0 14px 30px rgba(14, 116, 144, 0.2);
+        }
+
+        .status-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+            padding: 1rem;
+        }
+
+        .status-map {
+            height: 460px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .action-grid {
+                grid-template-columns: repeat(2, minmax(140px, 1fr));
+            }
+
+            .status-map {
+                height: 360px;
+            }
+        }
+
+        .btn-pill {
+            border-radius: 999px;
+            font-weight: 700;
+            border-width: 2px;
+        }
+    </style>
+</head>
+<body>
+<div id="statusPageRoot">
+    <div class="container-fluid fixed-top">
+        <div class="container px-0">
+            <nav class="navbar navbar-light bg-white navbar-expand-xl shadow-sm">
+                <a href="http://localhost:3000/" class="navbar-brand"><h1 class="text-primary display-6">FlashStock</h1></a>
+                <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars text-primary"></span>
+                </button>
+                <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto">
+                        <a href="http://localhost:3000/" class="nav-item nav-link">Inicio</a>
+                        <a href="http://localhost:3000/shop" class="nav-item nav-link">Tienda</a>
+                        <a href="http://localhost:3000/cart" class="nav-item nav-link">Carrito</a>
+                        <a href="http://localhost:3000/checkout" class="nav-item nav-link">Checkout</a>
+                        <a href="http://localhost:3000/delivery" class="nav-item nav-link">Delivery</a>
+                        <a href="http://localhost:3000/order-status" class="nav-item nav-link active">Estado Pedido</a>
+                    </div>
+                    <div class="d-flex m-3 me-0">
+                        <a href="http://localhost:3000/cart" class="position-relative me-4 my-auto">
+                            <i class="fa fa-shopping-bag fa-2x"></i>
+                            <span id="statusCartBadge" class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">0</span>
+                        </a>
+                        <a href="http://localhost:3000/login" class="my-auto" id="navbarUserLink">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">Estado de tu pedido</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="http://localhost:3000/">Inicio</a></li>
+            <li class="breadcrumb-item active text-white">Seguimiento</li>
+        </ol>
+    </div>
+
+    <div class="status-shell">
+        <section class="status-hero mb-3">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                <div>
+                    <h4 class="mb-1">Proceso de pedido y entrega en vivo</h4>
+                    <p class="mb-0">Selecciona un pedido para ver mapa, conductor, ETA y acciones.</p>
+                </div>
+                <div class="small" id="statusLastUpdate">Actualizado: -</div>
+            </div>
+        </section>
+
+        <section class="status-card mb-3">
+            <h5 class="mb-3">Mis pedidos</h5>
+            <div id="statusOrdersList" class="small text-muted">Cargando pedidos...</div>
+            <div class="mt-3">
+                <label for="statusManualTracking" class="form-label mb-1">Buscar por tracking</label>
+                <div class="input-group">
+                    <input id="statusManualTracking" type="text" class="form-control" placeholder="Ej: TRK-ac776be4" autocomplete="off">
+                    <button id="btnStatusManualTracking" class="btn btn-outline-primary" type="button">Cargar</button>
+                </div>
+                <div id="statusManualTrackingResult" class="small text-muted mt-2"></div>
+            </div>
+        </section>
+
+        <section id="statusTrackingPanel" class="status-card mb-3" style="display:none;">
+            <div class="row g-3 mb-3">
+                <div class="col-6 col-md-3"><div><strong>Orden</strong><div id="statusOrderNumber">-</div></div></div>
+                <div class="col-6 col-md-3"><div><strong>Estado</strong><div id="statusOrderState">-</div></div></div>
+                <div class="col-6 col-md-3"><div><strong>Tracking</strong><div id="statusTrackingNumber">-</div></div></div>
+                <div class="col-6 col-md-3"><div><strong>Llegada estimada</strong><div id="statusEtaRemaining">-</div></div></div>
+            </div>
+
+            <div id="statusDeliveryMap" class="status-map mb-3"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4"><strong>Conductor:</strong> <span id="statusCourier">-</span></div>
+                <div class="col-md-4"><strong>Direccion:</strong> <span id="statusAddress">-</span></div>
+                <div class="col-md-4"><strong>Ultima actualizacion:</strong> <span id="statusUpdatedAt">-</span></div>
+            </div>
+
+            <div class="action-grid">
+                <button id="btnTip" type="button" class="btn btn-warning btn-pill">Propina</button>
+                <button id="btnCallCourier" type="button" class="btn btn-success btn-pill">Llamar repartidor</button>
+                <button id="btnContactUs" type="button" class="btn btn-danger btn-pill">Contactanos</button>
+                <button id="btnReceived" type="button" class="btn btn-primary btn-pill">Recibido</button>
+            </div>
+
+            <div id="statusActionResult" class="small text-muted mt-3"></div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="receivedConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar recepción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    Confirmas que recibiste el pedido con exito?
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalCancel" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btnModalSupport" type="button" class="btn btn-outline-danger">Soporte tecnico</button>
+                    <button id="btnModalConfirm" type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="/runtime-config.js"></script>
+<script src="js/order-status.js"></script>
+</body>
+</html>

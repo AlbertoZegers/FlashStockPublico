@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>FlashStock - Centro de Delivery</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .delivery-hero {
+            background: linear-gradient(120deg, rgba(14, 116, 144, 0.92), rgba(34, 197, 94, 0.82));
+            border-radius: 18px;
+            color: #fff;
+            padding: 28px;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.14);
+        }
+
+        .delivery-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+        }
+
+        .delivery-map {
+            height: 520px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #e8edf4;
+        }
+
+        .delivery-stat {
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 14px;
+        }
+
+        @media (max-width: 768px) {
+            .delivery-map {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="deliveryPageRoot">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+
+    <div class="container-fluid fixed-top">
+        <div class="container px-0">
+            <nav class="navbar navbar-light bg-white navbar-expand-xl shadow-sm">
+                <a href="http://localhost:3000/" class="navbar-brand"><h1 class="text-primary display-6">FlashStock</h1></a>
+                <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars text-primary"></span>
+                </button>
+                <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto">
+                        <a href="http://localhost:3000/" class="nav-item nav-link">Inicio</a>
+                        <a href="http://localhost:3000/shop" class="nav-item nav-link">Tienda</a>
+                        <a href="http://localhost:3000/cart" class="nav-item nav-link">Carrito</a>
+                        <a href="http://localhost:3000/checkout" class="nav-item nav-link">Checkout</a>
+                        <a href="http://localhost:3000/delivery" class="nav-item nav-link active">Delivery</a>
+                        <a href="http://localhost:3000/order-status" class="nav-item nav-link">Estado Pedido</a>
+                    </div>
+                    <div class="d-flex m-3 me-0">
+                        <a href="http://localhost:3000/cart" class="position-relative me-4 my-auto">
+                            <i class="fa fa-shopping-bag fa-2x"></i>
+                            <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">0</span>
+                        </a>
+                        <a href="http://localhost:3000/login" class="my-auto" id="navbarUserLink">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">Centro de Delivery</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="http://localhost:3000/">Inicio</a></li>
+            <li class="breadcrumb-item active text-white">Seguimiento en vivo</li>
+        </ol>
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="container py-4">
+            <div class="delivery-hero mb-4">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-8">
+                        <h3 class="mb-2">Trazabilidad profesional de envios</h3>
+                        <p class="mb-0">Visualiza en un solo panel el GPS de tienda, cliente, pedido y repartidor, con ruta, ETA restante y tiempos por tramo.</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="manualTrackingNumber" class="form-label text-white">Tracking manual</label>
+                        <div class="input-group">
+                            <input id="manualTrackingNumber" type="text" class="form-control" placeholder="Ej: TRK-000123">
+                            <button id="btnManualTrack" type="button" class="btn btn-light">Ver en mapa</button>
+                        </div>
+                        <div id="manualTrackResult" class="small mt-2" style="min-height: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="myOrdersPanel" class="mb-4">
+                <div class="delivery-card p-3">
+                    <h5 class="mb-3">Mis pedidos con envio</h5>
+                    <div id="myOrdersList" class="small text-muted">Cargando historial...</div>
+                </div>
+            </div>
+
+            <div id="deliveryTrackingPanel" class="mb-4" style="display:none;">
+                <div class="delivery-card p-3 p-lg-4">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6 col-md-4 col-lg-2"><div class="delivery-stat"><strong>Estado</strong><div id="trackingStatus">-</div></div></div>
+                        <div class="col-6 col-md-4 col-lg-2"><div class="delivery-stat"><strong>Avance</strong><div id="trackingProgress">0%</div></div></div>
+                        <div class="col-12 col-md-4 col-lg-3"><div class="delivery-stat"><strong>Repartidor</strong><div id="trackingCourier">-</div></div></div>
+                        <div class="col-12 col-md-6 col-lg-3"><div class="delivery-stat"><strong>Destino</strong><div id="trackingAddress">-</div></div></div>
+                        <div class="col-6 col-md-3 col-lg-1"><div class="delivery-stat"><strong>ETA total</strong><div id="trackingEtaTotal">-</div></div></div>
+                        <div class="col-6 col-md-3 col-lg-1"><div class="delivery-stat"><strong>ETA restante</strong><div id="trackingEtaRemaining">-</div></div></div>
+                    </div>
+
+                    <div id="deliveryTrackingMap" class="delivery-map"></div>
+
+                    <div class="mt-3">
+                        <h6 class="mb-2">Tiempos por tramo</h6>
+                        <div id="trackingSegments" class="small text-muted">Sin datos de tramos.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="driverLivePanel" class="mb-4" style="display:none;">
+                <div class="delivery-card p-3 p-lg-4">
+                    <h5 class="mb-3">Panel de repartidor en vivo (Admin)</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="driverTrackingNumber" class="form-label">Tracking</label>
+                            <input id="driverTrackingNumber" class="form-control" type="text" placeholder="TRK-000123">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="driverStatus" class="form-label">Estado</label>
+                            <select id="driverStatus" class="form-select">
+                                <option value="proceso">proceso</option>
+                                <option value="enviado">enviado</option>
+                                <option value="cancelado">cancelado</option>
+                                <option value="completado">completado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="driverName" class="form-label">Repartidor</label>
+                            <input id="driverName" class="form-control" type="text" placeholder="Nombre repartidor">
+                        </div>
+                        <div class="col-md-1">
+                            <label for="driverLat" class="form-label">Lat</label>
+                            <input id="driverLat" class="form-control" type="number" step="0.000001" placeholder="-33.45">
+                        </div>
+                        <div class="col-md-1">
+                            <label for="driverLng" class="form-label">Lng</label>
+                            <input id="driverLng" class="form-control" type="number" step="0.000001" placeholder="-70.66">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button id="btnDriverUpdateLive" class="btn btn-primary w-100" type="button">Actualizar</button>
+                        </div>
+                    </div>
+                    <div id="driverLiveResult" class="small text-muted mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/lightbox/js/lightbox.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/runtime-config.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

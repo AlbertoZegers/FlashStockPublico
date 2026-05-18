@@ -1,0 +1,1 @@
+window.FLASHSTOCK_API_BASE = "";
